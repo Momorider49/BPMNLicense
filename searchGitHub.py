@@ -3,8 +3,8 @@ from github import RateLimitExceededException
 import calendar
 import logging
 import time
-g = Github('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')
-Github.AccessToken = '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'
+g = Github()
+Github.AccessToken = 
 
 
 def searchgithub():
