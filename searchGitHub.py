@@ -3,8 +3,9 @@ from github import RateLimitExceededException
 import calendar
 import logging
 import time
-g = Github()
-Github.AccessToken = 
+#insert your Github Access Token below
+g = Github('')
+Github.AccessToken = ''
 
 
 def searchgithub():
