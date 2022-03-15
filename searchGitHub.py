@@ -52,14 +52,15 @@ def searchgithub(x,y):
 #Ein kleines Intervall erhöht die Genauigkeit der Suche
 intervall = 10
 #m Bestimmt den Startpunkt, hier kann die Suche gut eingeteilt werden
-m = 5000
-n = m + intervall
+smallestfilesize = 5000
+largestfilesize = 10000
+n = smallestfilesize + intervall
 
 #Die Zahl hier muss verändert werden wenn man auch größere Dateien finden möchte
-while m<=10000:
-    print(str(m) +" bis " + str(n))
-    searchgithub(m, n)
+while smallestfilesize<=largestfilesize:
+    print(str(smallestfilesize) +" bis " + str(n))
+    searchgithub(smallestfilesize, n)
     #time.sleep(60)
-    m= m + intervall
+    smallestfilesize= smallestfilesize + intervall
     n = n + intervall
 
