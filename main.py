@@ -25,15 +25,25 @@ def addURL(url):
         return url
     return 0
 
+def removeduplicate():
+    lines_seen = set()
+    outfile = open('foundfiles.txt', "w")
+    for line in open('foundfiles.txt', "r"):
+        if line not in lines_seen:
+            outfile.write(line)
+            lines_seen.add(line)
+    outfile.close()
+
 if __name__ == '__main__':
     lines = []
-    with open('approvedlicense.txt', 'rt') as file:
+    removeduplicate()
+    with open('foundfiles.txt', 'rt') as file:
         for line in file:
             lines.append(line.strip()) #sehr wichtig
         for element in lines:
                 try:
                     originalurl = (str(element).split('/', -1)[0] + "//" + str(element).split('/')[2] + "/" + str(element).split('/')[3] +"/"+ str(element).split('/')[4])
-                    print(originalurl)
+                    #print(originalurl)
                 except:
                     print("-")
                 url = addURL(originalurl)
@@ -41,3 +51,4 @@ if __name__ == '__main__':
                     r = requests.get(url, headers=headers)
                     soup = BeautifulSoup(r.text, 'html.parser')
                     checkLicense(str(soup.getText), element)
+                lines.remove(element)
