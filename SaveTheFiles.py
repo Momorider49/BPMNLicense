@@ -44,21 +44,16 @@ def savelicenses():
                         i += 1
                 except IndexError:
                     ok = 0
-                #print(ous[:-1])
                 lines.append(ous[:-1])
                 c = False
         for line in lines:
-            #print(line)
             try:
                 originalurl = (str(line).split('/', -1)[0] + "//" + "github.com" + "/" +
                                str(line).split('/')[3] + "/" + str(line).split('/')[4])
-                #print(originalurl)
             except:
                 print("-")
-            #print(originalurl)
             licenseurl = addURL(originalurl)
-            #print(licenseurl)
-            #print(line.split('/'))
+            #Hier Datei Pfad angeben
             filename = f"D:/Dokumente/Studium/PD/{str(line.split('/')[3])}+{str(line.split('/')[4])}/{str(line.split('/')[-1])}"
             licensename = f"D:/Dokumente/Studium/PD/{str(line.split('/')[3])}+{str(line.split('/')[4])}/license.txt"
             os.makedirs(os.path.dirname(filename), exist_ok=True)
