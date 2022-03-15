@@ -4,25 +4,40 @@ import calendar
 import logging
 import time
 #insert your Github Access Token below
+#Der Personal Access Token muss hier in die Klammer als String
 g = Github('')
+#Und hier als String
 Github.AccessToken = ''
 
 
-def searchgithub():
+def searchgithub(x,y):
+    z = True
     count = 0
+    tc = 0
     logger = logging
-    keyword = "bpmn"
+    keyword = f"bpmn  size:{x}..{y}"
     issues = g.search_code(query=keyword)
-    while True:
+    totalcount = issues.totalCount
+    print(totalcount)
+    while z == True:
         try:
             for pr in issues:
-                with open('approvedlicense.txt', 'a') as file:
+                with open('foundfiles.txt', 'a') as file:
                     try:
-                        print(count)
                         file.write("https://github.com/" + pr.repository.full_name + "/blob/master/" + pr.path + "\n")
+                        count += 1
+                        tc += 1
+                        if tc >= totalcount:
+                            search_rate_limit = g.get_rate_limit().search
+                            logger.info('search remaining: {}'.format(search_rate_limit.remaining))
+                            reset_timestamp = calendar.timegm(search_rate_limit.reset.timetuple())
+                            sleep_time = reset_timestamp - calendar.timegm(time.gmtime()) + 10
+                            print(f"Sleep Time: + {sleep_time}")
+                            time.sleep(sleep_time)
+                            z = False
+                            break
                     except:
                         print("Whoops")
-            count += 1
             logger.info(count)
         except StopIteration:
             break  # loop end
@@ -31,10 +46,20 @@ def searchgithub():
             logger.info('search remaining: {}'.format(search_rate_limit.remaining))
             reset_timestamp = calendar.timegm(search_rate_limit.reset.timetuple())
             sleep_time = reset_timestamp - calendar.timegm(time.gmtime()) + 10
-            print(sleep_time)
+            print(f"Sleep Time: + {sleep_time}")
             time.sleep(sleep_time)
             continue
+#Ein kleines Intervall erhöht die Genauigkeit der Suche
+intervall = 10
+#m Bestimmt den Startpunkt, hier kann die Suche gut eingeteilt werden
+m = 5000
+n = m + intervall
 
-
-searchgithub()
+#Die Zahl hier muss verändert werden wenn man auch größere Dateien finden möchte
+while m<=10000:
+    print(str(m) +" bis " + str(n))
+    searchgithub(m, n)
+    #time.sleep(60)
+    m= m + intervall
+    n = n + intervall
 
