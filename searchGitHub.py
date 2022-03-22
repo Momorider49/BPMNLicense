@@ -3,19 +3,17 @@ from github import RateLimitExceededException
 import calendar
 import logging
 import time
-#insert your Github Access Token below
-#Der Personal Access Token muss hier in die Klammer als String
-g = Github('')
-#Und hier als String
-Github.AccessToken = ''
+import config
 
+g = Github(config.GHAC)
+Github.AccessToken = config.GHAC
 
 def searchgithub(x,y):
     z = True
     count = 0
     tc = 0
     logger = logging
-    keyword = f"bpmn  size:{x}..{y}"
+    keyword = f"{config.Keyword}  size:{x}..{y}"
     issues = g.search_code(query=keyword)
     totalcount = issues.totalCount
     print(totalcount)
@@ -49,18 +47,15 @@ def searchgithub(x,y):
             print(f"Sleep Time: + {sleep_time}")
             time.sleep(sleep_time)
             continue
-#Ein kleines Intervall erhöht die Genauigkeit der Suche
-intervall = 10
-#m Bestimmt den Startpunkt, hier kann die Suche gut eingeteilt werden
-smallestfilesize = 5000
-largestfilesize = 10000
+            
+intervall = config.intervall
+smallestfilesize = config.smallestfilesize
+largestfilesize = config.largestfilesize
 n = smallestfilesize + intervall
 
-#Die Zahl hier muss verändert werden wenn man auch größere Dateien finden möchte
-while smallestfilesize<=largestfilesize:
-    print(str(smallestfilesize) +" bis " + str(n))
+while smallestfilesize <= largestfilesize:
+    print(str(smallestfilesize) + " bis " + str(n))
     searchgithub(smallestfilesize, n)
-    #time.sleep(60)
     smallestfilesize= smallestfilesize + intervall
     n = n + intervall
 
