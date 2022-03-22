@@ -3,13 +3,11 @@ import os
 from bs4 import BeautifulSoup
 from github import Github
 import main
+import config
 
-#Der Personal Access Token muss hier in die Klammer als String
-g = Github('')
-#Und hier als String
-Github.AccessToken = ''
-#Hier den eigenen User-Agent einfügen
-headers = {'User-Agent': ''}
+g = Github(config.GHAC)
+Github.AccessToken = config.GHAC
+headers = {'User-Agent': config.UserAgent}
 
 removablelines = []
 mains = main
@@ -44,18 +42,23 @@ def savelicenses():
                         i += 1
                 except IndexError:
                     ok = 0
+                #print(ous[:-1])
                 lines.append(ous[:-1])
                 c = False
         for line in lines:
+            #print(line)
             try:
                 originalurl = (str(line).split('/', -1)[0] + "//" + "github.com" + "/" +
                                str(line).split('/')[3] + "/" + str(line).split('/')[4])
+                #print(originalurl)
             except:
                 print("-")
+            #print(originalurl)
             licenseurl = addURL(originalurl)
-            #Hier Datei Pfad angeben
-            filename = f"D:/Dokumente/Studium/PD/{str(line.split('/')[3])}+{str(line.split('/')[4])}/{str(line.split('/')[-1])}"
-            licensename = f"D:/Dokumente/Studium/PD/{str(line.split('/')[3])}+{str(line.split('/')[4])}/license.txt"
+            #print(licenseurl)
+            #print(line.split('/'))
+            filename = f"{config.savefolder}/{str(line.split('/')[3])}+{str(line.split('/')[4])}/{str(line.split('/')[-1])}"
+            licensename = f"{config.savefolder}/{str(line.split('/')[3])}+{str(line.split('/')[4])}/license.txt"
             os.makedirs(os.path.dirname(filename), exist_ok=True)
             os.makedirs(os.path.dirname(licensename), exist_ok=True)
             r = requests.get(line, headers=headers)
@@ -65,7 +68,7 @@ def savelicenses():
                 try:
                     f.write(s)
                 except:
-                    print(s)
+                    #print(s)
                     continue
                 lines.remove(line)
             with open(licensename, "w") as ln:
