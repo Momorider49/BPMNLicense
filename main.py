@@ -1,17 +1,15 @@
 import requests
 from bs4 import BeautifulSoup
+import config
 import main
 
-headers = {'User-Agent': ''}
-#L = []
-#nL = []
+headers = {'User-Agent': config.UserAgent}
 
 def checkLicense(s, url):
-    if s.find('MIT License') != -1 or s.find('Apache') != -1 or s.find('BSD 3-Clause License') or s.find('ISC License') != -1 or s.find('ISC License') != -1 or s.find('BSD Zero Clause') != -1 or s.find('Artistic License') != -1 or s.find('BSD 2-Clause') != -1 or s.find('BSD License') != -1 or s.find('BSD 3-Clause') != -1 or s.find('BSD 4-Clause') != -1 or s.find('Boost Software License') != -1 or s.find('CCO 1.0 Universal') != -1 or s.find('Attribution 4.0') != -1 or s.find('Educational Community License') != -1 or s.find('MIT No Attribution') != -1 or s.find('Microsoft Public License') != -1 or s.find('Mulan PSL v2') != -1 or s.find('NCSA Open Soruce License') != -1 or s.find('SIL OPEN FONT LICENSE') != -1 or s.find('PostgreSQL License') != -1 or s.find('free and unencumbered software') != -1 or s.find('Universal Permissive License') != -1 or s.find('DO WHAT THE FUCK YOU WANT') != -1 or s.find('BSD Zero Clause License') != -1 or s.find('zlib License') != -1:
+    if s.find('MIT License') != -1 or s.find('Apache') != -1 or s.find('ISC License') != -1 or s.find('BSD 3-Clause License') or s.find('ISC License') != -1 or s.find('BSD Zero Clause') != -1 or s.find('Artistic License') != -1 or s.find('BSD 2-Clause') != -1 or s.find('BSD License') != -1 or s.find('BSD 3-Clause') != -1 or s.find('BSD 4-Clause') != -1 or s.find('Boost Software License') != -1 or s.find('CCO 1.0 Universal') != -1 or s.find('Attribution 4.0') != -1 or s.find('Educational Community License') != -1 or s.find('MIT No Attribution') != -1 or s.find('Microsoft Public License') != -1 or s.find('Mulan PSL v2') != -1 or s.find('NCSA Open Soruce License') != -1 or s.find('SIL OPEN FONT LICENSE') != -1 or s.find('PostgreSQL License') != -1 or s.find('free and unencumbered software') != -1 or s.find('Universal Permissive License') != -1 or s.find('DO WHAT THE FUCK YOU WANT') != -1 or s.find('BSD Zero Clause License') != -1 or s.find('zlib License') != -1:
         print('License found')
         with open('license.txt', 'a') as file:
             file.write(url + "\n")
-            #L.append(url)
 
 def addURL(url):
     if requests.get(str(url) + '/raw/master/LICENSE', headers=headers):
@@ -36,7 +34,6 @@ def removeduplicate():
 
 if __name__ == '__main__':
     lines = []
-    removeduplicate()
     with open('foundfiles.txt', 'rt') as file:
         for line in file:
             lines.append(line.strip()) #sehr wichtig
@@ -52,3 +49,5 @@ if __name__ == '__main__':
                     soup = BeautifulSoup(r.text, 'html.parser')
                     checkLicense(str(soup.getText), element)
                 lines.remove(element)
+
+    removeduplicate()
