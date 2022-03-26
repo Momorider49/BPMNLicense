@@ -49,9 +49,9 @@ def searchgithub(x,y):
             continue
             
 intervall = config.intervall
-smallestfilesize = config.smallestfilesize
+smallestfilesize = config.smallestfilesize +1
 largestfilesize = config.largestfilesize
-n = smallestfilesize + intervall
+n = smallestfilesize + intervall -1
 
 while smallestfilesize <= largestfilesize:
     print(str(smallestfilesize) + " bis " + str(n))
