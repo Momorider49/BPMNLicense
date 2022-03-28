@@ -1,12 +1,16 @@
 import requests
 import os
+import codecs
 from bs4 import BeautifulSoup
 from github import Github
 import main
 import config
 
+#Der Personal Access Token muss hier in die Klammer als String
 g = Github(config.GHAC)
+#Und hier als String
 Github.AccessToken = config.GHAC
+#Hier den eigenen User-Agent einfügen
 headers = {'User-Agent': config.UserAgent}
 
 removablelines = []
@@ -23,6 +27,7 @@ def addURL(url):
         return url
     else:
         return 0
+
 
 def savelicenses():
     c = True
@@ -64,21 +69,21 @@ def savelicenses():
             r = requests.get(line, headers=headers)
             sp = BeautifulSoup(r.text, 'html.parser')
             s = str(sp.get_text(separator= '\n'))
-            with open(filename, "w") as f:
+            s.encode('ascii', 'ignore')
+            with codecs.open(filename, "w", encoding="utf-8") as f:
                 try:
                     f.write(s.strip())
                     print(s.split("\n")[1:])
-                except:
-                    print(s)
-                    #continue
+                except UnicodeEncodeError:
+                    f.write('Unknown Characters Found')
                 lines.remove(line)
-            with open(licensename, "w") as ln:
+            with codecs.open(licensename, "w", encoding="utf-8") as ln:
                 if licenseurl != 0:
                     re = requests.get(licenseurl, headers=headers)
                     soups = BeautifulSoup(re.text, 'html.parser')
                     try:
                         ln.write(soups.getText())
-                    except:
+                    except UnicodeEncodeError:
                         ln.write('Unknown Characters Found')
             savedlines = []
             with open('savedlicenses.txt', 'w') as file:
