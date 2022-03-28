@@ -23,7 +23,7 @@ def addURL(url):
         return url
     return 0
 
-def removeduplicate():
+def removeoldlist():
     lines_seen = set()
     outfile = open('foundfiles.txt', "w")
     for line in open('foundfiles.txt', "r"):
@@ -32,8 +32,20 @@ def removeduplicate():
             lines_seen.add(line)
     outfile.close()
 
+def removeduplicate():
+    lines_seen = set()
+    for line in open('foundfiles.txt', "r"):
+        if line not in lines_seen:
+            #outfile.write(line)
+            lines_seen.add(line)
+    outfile = open('foundfiles.txt', "w")
+    for lined in lines_seen:
+        outfile.write(lined)
+    outfile.close()
+
 if __name__ == '__main__':
     lines = []
+    removeduplicate()
     with open('foundfiles.txt', 'rt') as file:
         for line in file:
             lines.append(line.strip()) #sehr wichtig
@@ -50,4 +62,4 @@ if __name__ == '__main__':
                     checkLicense(str(soup.getText), element)
                 lines.remove(element)
 
-    removeduplicate()
+    removeoldlist()
