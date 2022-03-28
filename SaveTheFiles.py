@@ -63,13 +63,14 @@ def savelicenses():
             os.makedirs(os.path.dirname(licensename), exist_ok=True)
             r = requests.get(line, headers=headers)
             sp = BeautifulSoup(r.text, 'html.parser')
-            s = str(sp.get_text)
+            s = str(sp.get_text(separator= '\n'))
             with open(filename, "w") as f:
                 try:
-                    f.write(s)
+                    f.write(s.strip())
+                    print(s.split("\n")[1:])
                 except:
-                    #print(s)
-                    continue
+                    print(s)
+                    #continue
                 lines.remove(line)
             with open(licensename, "w") as ln:
                 if licenseurl != 0:
